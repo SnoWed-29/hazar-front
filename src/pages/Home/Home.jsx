@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '../../components/Navbar';
 import backgroundImage from '../../assets/images/hazar-Back.webp'; // Import your background image
 
 const styles = {
   container: {
     backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover',
-    minHeight: '100vh', // Ensures the background covers the entire viewport
+     height: '100vh',
+    width: '100%',
+    position: 'absolute',
+    top: 0,
     display: 'flex',
     flexDirection: 'column',
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    objectFit: 'cover',
   },
   content: {
     display: 'flex',
@@ -22,6 +28,9 @@ const styles = {
 };
 
 export default function Home() {
+  useEffect(() => {
+    document.title = 'Hazar | Home'; // Set the desired page title here
+  }, []);
   return (
     <div style={styles.container}>
       <Navbar color="text-white" />
