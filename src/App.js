@@ -5,6 +5,9 @@ import Products from './pages/Product/Product';
 // import Navbar from './components/Navbar';
 import Home from './pages/Home/Home'
 import './index.css'; // Ensure you have the correct path
+import './App.css'; // Ensure you have the correct path
+import ShowProduct from './pages/ShowProduct/ShowProduct';
+import TestApiComponent from './components/TestApiComponent';
 function App() {
   return (
     <Router className="bg-gray-100 text-center p-4">
@@ -12,7 +15,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/signin" element={<div>Sign In Page</div>} />
+          <Route path="/showproduct" element={<ShowProduct />} />
+          <Route path="/testapi" element={<TestApiComponent />} />
+
         </Routes>
       </div>
     </Router>

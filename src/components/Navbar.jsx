@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logoBlack from '../assets/images/logoBlack.svg'; 
-import logoWhite from '../assets/images/logoWhite.svg'; 
+import { fetchDataFromApi } from '../services/apiService';
 
-export default function Navbar({color}) {
-  const location = useLocation();
+const Navbar = ({ color }) => {
+  const [categories, setCategories] = useState([]);
+  const [error, setError] = useState(null);
 
-  // Check the URL pathname to determine which logo to use
-  const logo = location.pathname === '/' ? logoWhite : logoBlack;
+  useEffect(() => {
+    const fetchCategoriesData = async () => {
+      try {
+        const response = await fetchDataFromApi('category');
+        // Access the 'data' array from the response
+        const categoriesData = response.data || [];
+        setCategories(categoriesData);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchCategoriesData();
+  }, []);
 
   return (
     <nav className={`hidden md:flex w-full ${color} justify-between p-2`}>
@@ -17,15 +30,16 @@ export default function Navbar({color}) {
           <Link to="/"><img src={logoBlack} alt="Logo" className="h-20 " /></Link>
         </div>
         <div className="flex w-2/4 text-lg font-custom font-medium p-2 py-4 my-4">
-          <ul className='flex w-full justify-between'>
-            <Link to="/" className='hover:border-b hover:border-black'><li>Manteaux</li></Link>
-            <Link to="/" className='hover:border-b hover:border-black'><li>Robes</li></Link>
-            <Link to="/" className='hover:border-b hover:border-black'><li>Chaussures</li></Link>
-            <Link to="/" className='hover:border-b hover:border-black'><li>Sac</li></Link>
-            <Link to="/" className='hover:border-b hover:border-black'><li>Pantalons</li></Link>
-            <Link to="/" className='hover:border-b hover:border-black'><li>Vestes</li></Link>
-            <Link to="/products" className='hover:border-b hover:border-black'><li>Products</li></Link>
-          </ul>
+          {categories.length > 0 && (
+            <ul className='flex w-full justify-between'>
+              {categories.map(category => (
+                <Link to={`/category/${category.slug}`} key={category.id} className='hover:border-b hover:border-black'>
+                  {/* Access the 'name' property of each category */}
+                  <li>{category.name}</li>
+                </Link>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="flex w-1/4 justify-end p-2 py-3 my-3">
           <Link to="/signin" className="px-4 py-2  h-fit border-2 border-white rounded-md">Se Connecter</Link>
@@ -38,3 +52,5 @@ export default function Navbar({color}) {
 Navbar.propTypes = {
   color: PropTypes.string.isRequired,
 };
+
+export default Navbar;
